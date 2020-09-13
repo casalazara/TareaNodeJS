@@ -1,2 +1,2 @@
 # TareaNodeJS
-El arhivo js es index, los html que usé son Clientes.html y proveedores.html
+El archivo js es index.s, los html que usé son clientes.html y proveedores.html
