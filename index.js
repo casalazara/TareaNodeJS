@@ -20,66 +20,54 @@ async function darClientes() {
 http
   .createServer(function (req, res) {
     let path = url.parse(req.url).pathname;
-    var finArchivo =
-      '</main>\
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"\
-      crossorigin="anonymous"></script>\
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"\
-      crossorigin="anonymous"></script>\
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"\
-      crossorigin="anonymous"></script>\
-      </body>\
-      </html>';
     if (path === "/api/proveedores") {
       darProveedores().then((datos) => {
-        fs.readFile("proveedores.html", (error, data) => {
+        fs.readFile("proveedores.html", "utf-8", (error, data) => {
           if (error) {
             res.writeHead(404, { "Content-Type": "text/html" });
             return res.end("Error leyendo proveedores");
           } else {
             res.writeHead(200, { "Content-Type": "text/html" });
-            res.write(data);
-            res.write('<h1 class="text-center">Listado de proveedores</h1>');
-            res.write(
+            var body = '<h1 class="text-center">Listado de proveedores</h1>\n';
+            body +=
               '<table class="table table-striped">\
           <thead>\
             <tr>\
                 <th>ID</th><th>Nombre</th><th>Contacto</th>\
             </tr>\
-          </thead>',
-            );
-            for (let dato of datos) {
-              res.write(
-                `<tr><td>${dato.idproveedor}</td><td>${dato.nombrecompania}</td><td>${dato.nombrecontacto}</td></tr>`,
-              );
-            }
-            res.end(finArchivo);
+          </thead>\n';
+            for (let dato of datos)
+              body += `<tr><td>${dato.idproveedor}</td><td>${dato.nombrecompania}</td><td>${dato.nombrecontacto}</td></tr>\n`;
+
+            datas = data.replace("{{Tabla}}", body);
+            res.write(datas);
+            return res.end();
           }
         });
       });
     } else if (path === "/api/clientes") {
       darClientes().then((datos) => {
-        fs.readFile("clientes.html", (error, data) => {
+        fs.readFile("clientes.html", "utf-8", (error, data) => {
           if (error) {
             res.writeHead(404, { "Content-Type": "text/html" });
             return res.end("Error leyendo clientes");
           } else {
             res.writeHead(200, { "Content-Type": "text/html" });
-            res.write(data);
-            res.write('<h1 class="text-center">Listado de clientes</h1>');
-            res.write(
+
+            var body = '<h1 class="text-center">Listado de clientes</h1>\n';
+            body +=
               '<table class="table table-striped">\
               <thead>\
                 <tr>\
                     <th>ID</th><th>Nombre</th><th>Contacto</th>\
                 </tr>\
-              </thead>',
-            );
+              </thead>';
+
             for (let dato of datos)
-              res.write(
-                `<tr><td>${dato.idCliente}</td><td>${dato.NombreCompania}</td><td>${dato.NombreContacto}</td></tr>`,
-              );
-            res.end(finArchivo);
+              body += `<tr><td>${dato.idCliente}</td><td>${dato.NombreCompania}</td><td>${dato.NombreContacto}</td></tr>\n`;
+            datas = data.replace("{{Tabla}}", body);
+            res.write(datas);
+            return res.end();
           }
         });
       });
