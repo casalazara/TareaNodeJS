@@ -36,8 +36,11 @@ http
                 <th>ID</th><th>Nombre</th><th>Contacto</th>\
             </tr>\
           </thead>\n';
+            body += "<tbody>";
+
             for (let dato of datos)
               body += `<tr><td>${dato.idproveedor}</td><td>${dato.nombrecompania}</td><td>${dato.nombrecontacto}</td></tr>\n`;
+            body += "</tbody>\n</table>";
 
             datas = data.replace("{{Tabla}}", body);
             res.write(datas);
@@ -62,9 +65,12 @@ http
                     <th>ID</th><th>Nombre</th><th>Contacto</th>\
                 </tr>\
               </thead>';
+            body += "<tbody>";
 
             for (let dato of datos)
               body += `<tr><td>${dato.idCliente}</td><td>${dato.NombreCompania}</td><td>${dato.NombreContacto}</td></tr>\n`;
+            body += "</tbody>\n</table>";
+
             datas = data.replace("{{Tabla}}", body);
             res.write(datas);
             return res.end();
